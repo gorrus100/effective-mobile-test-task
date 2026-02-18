@@ -31,11 +31,10 @@ RUN useradd python-app --no-create-home
 USER python-app
 
 # вывеска. порт может быть любым, указанным в .env
-EXPOSE 8080 
+EXPOSE $APP_PORT 
 
 # проверка сначала не сработает из-за имитации долгой загрузки. это будет использовано далее в docker-compose
-HEALTHCHECK --interval=5s --timeout=1s --start-period=1s --retries=1 CMD [ "nc", "-z", "localhost", "8080" ]
+HEALTHCHECK --interval=5s --timeout=1s --start-period=1s --retries=1 CMD [ "sh", "-c", "nc -z localhost $APP_PORT"]
 
-# отсутствие переменных в dockerfile, прокидываются снаружи
 CMD ["python", "app.py"]
 

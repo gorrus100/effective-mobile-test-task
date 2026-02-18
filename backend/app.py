@@ -1,3 +1,4 @@
+
 from flask import Flask
 from dotenv import load_dotenv
 from os import environ
@@ -6,8 +7,9 @@ from time import sleep
 
 load_dotenv()
 port=environ.get("APP_PORT")
-root_answer = "Hello from Effective Mobile!\n"
+has_delay=environ.get("APP_HAS_DELAY", "false").lower() == "true"
 delay=5
+root_answer = "Hello from Effective Mobile!\n"
 
 # порт обязательно должен быть указан в .env
 try:
@@ -22,8 +24,10 @@ app = Flask(__name__)
 def root():
     return root_answer
 
-print("##########################################################################################") 
-print(f"### Искусственная задержка долгого старта приложения({delay} секунд). Для healthcheck... #######")
-print("##########################################################################################", flush=True ) 
-sleep(delay)  # имитация долгой загрузки приложения для healthcheck
+if has_delay:
+    print("##########################################################################################") 
+    print(f"### Искусственная задержка долгого старта приложения({delay} секунд). Для healthcheck... #######")
+    print("##########################################################################################", flush=True ) 
+    sleep(delay)  # имитация долгой загрузки приложения для healthcheck
+
 app.run(host="0.0.0.0", port=port_value)
