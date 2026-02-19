@@ -3,11 +3,13 @@ services:
     build: backend
     image: app-python:1.0.0
     container_name: backend
-    pull_policy: if_not_present
+    pull_policy: never
     expose:
       - $APP_PORT
     env_file:
       - .env
+    networks:
+      - private
   proxy:
     image: nginx:stable-alpine3.23
     container_name: proxy
@@ -17,6 +19,16 @@ services:
       - "80:${PROXY_LISTEN_PORT}"
     volumes:
       - ./nginx/proxy.conf.template:/etc/nginx/templates/default.conf.template
+    networks:
+      - private
+      - public
     depends_on:
       backend:
         condition: service_healthy
+
+networks:
+  private:
+    driver: bridge
+    internal: true
+  public:
+    driver: bridge
