@@ -12,3 +12,9 @@ run_backend_alone:
 	--rm \
 	--mount type=bind,src=.env,dst=/app/.env \
 	app-python:1.0.0 
+
+run_compose:
+	docker-compose up --build
+
+prepare:
+	cp .env.example .env

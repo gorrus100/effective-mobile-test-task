@@ -34,7 +34,7 @@ USER python-app
 EXPOSE $APP_PORT 
 
 # проверка сначала не сработает из-за имитации долгой загрузки. это будет использовано далее в docker-compose
-HEALTHCHECK --interval=5s --timeout=1s --start-period=1s --retries=1 CMD [ "sh", "-c", "nc -z localhost $APP_PORT"]
+HEALTHCHECK --interval=2s --timeout=2s --start-period=3s --retries=1 CMD [ "sh", "-c", "nc -z localhost $APP_PORT"]
 
 CMD ["python", "app.py"]
 

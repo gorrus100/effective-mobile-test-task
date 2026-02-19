@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: backend
+    image: app-python:1.0.0
+    container_name: backend
+    pull_policy: if_not_present
+    expose:
+      - $APP_PORT
+    env_file:
+      - .env
+  proxy:
+    image: nginx:stable-alpine3.23
+    container_name: proxy
+    env_file:
+      - .env
+    ports:
+      - "80:${PROXY_LISTEN_PORT}"
+    volumes:
+      - ./nginx/proxy.conf.template:/etc/nginx/templates/default.conf.template
+    depends_on:
+      backend:
+        condition: service_healthy
